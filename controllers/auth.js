@@ -53,7 +53,9 @@ exports.login = async (request, response) => {
                 response.status(401).send("Invalid username or password");
             }
         }
-        // response.send(user);
+        response.status(401).send({
+            client_message: "Invalid User",
+        });
     } catch (error) {
         console.log(error);
         response.status(500).send("server error");
