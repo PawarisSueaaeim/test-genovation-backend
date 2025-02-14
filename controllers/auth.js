@@ -40,13 +40,13 @@ exports.login = async (request, response) => {
                         username: user.username,
                     },
                 };
-                jwt.sign(payload, "jwtsecret", { expiresIn: 1000 }, (error, token) => {
+                jwt.sign(payload, "jwtsecret", { expiresIn: 20 }, (error, token) => {
                     if (error) {
                         throw error;
                     }
                     response.json({
                         token,
-                        payload,
+                        username: user.username,
                     });
                 });
             } else {
