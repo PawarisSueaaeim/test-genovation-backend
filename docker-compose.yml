@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb_container
+    restart: always
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  app:
+    build: .
+    container_name: server_backend
+    restart: always
+    depends_on:
+      - mongodb
+    ports:
+      - "9000:9000"
+    env_file:
+      - .env
+    environment:
+      DATABASE_HOST: mongodb
+      DATABASE_PORT: 27017
+      DATABASE_COLLECTION: code-sanbox-project
+    command: npm start
+
+volumes:
+  mongodb_data:

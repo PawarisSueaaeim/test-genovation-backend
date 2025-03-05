@@ -1,9 +1,15 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 
 const connectDB = async () => {
+    const HOST = process.env.DATABASE_HOST;
+    const PORT = process.env.DATABASE_PORT;
+    const COLLECTION = process.env.DATABASE_COLLECTION;
+
     try {
-        await mongoose.connect('mongodb://127.0.0.1:27017/code-sanbox-project');
-        console.log("Connected to mongodb://localhost:27017/code-sanbox-project")
+        console.log(`Connect to mongodb://${HOST}:${PORT}/${COLLECTION}`);
+        await mongoose.connect(`mongodb://${HOST}:${PORT}/${COLLECTION}`);
+        console.log(`Connect successfuly! to mongodb://${HOST}:${PORT}/${COLLECTION}`)
     } catch (error) {
         console.log(error);
     }
