@@ -19,4 +19,4 @@ app.use(bodyParser.json({
 
 readdirSync('./routes').map((r) => app.use('/api', require('./routes/' + r)));
 
-app.listen(9000, () => console.log('Server is running on port 9000'));
+app.listen(9001, () => console.log('Server is running on port 9001'));

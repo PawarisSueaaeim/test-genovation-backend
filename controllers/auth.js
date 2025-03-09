@@ -15,7 +15,7 @@ exports.register = async (request, response) => {
                 username: data.username,
                 password: hash,
             }).save();
-            response.send("created successfully");
+            response.status(200).send("created successfully");
         } else {
             response.status(400).send("User already registered");
         }
@@ -33,29 +33,33 @@ exports.login = async (request, response) => {
             { new: true }
         );
         if (user) {
-            var isMatch = await bcrypt.compare(data.password, user.password);
+            const isMatch = await bcrypt.compare(data.password, user.password);
             if (isMatch) {
                 const payload = {
                     auth: {
                         username: user.username,
                     },
                 };
-                jwt.sign(payload, "jwtsecret", { expiresIn: 20 }, (error, token) => {
-                    if (error) {
-                        throw error;
+                jwt.sign(
+                    payload,
+                    "jwtsecret",
+                    { expiresIn: 20 },
+                    (error, token) => {
+                        if (error) {
+                            throw error;
+                        }
+                        response.json({
+                            token,
+                            username: user.username,
+                        });
                     }
-                    response.json({
-                        token,
-                        username: user.username,
-                    });
-                });
+                );
             } else {
-                response.status(401).send("Invalid username or password");
+                response.status(401).send("Invalid password");
             }
+        } else {
+            response.status(401).send("Invalid User");
         }
-        response.status(401).send({
-            client_message: "Invalid User",
-        });
     } catch (error) {
         console.log(error);
         response.status(500).send("server error");

@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.get("/product/:id", auth, getProduct);
 
-router.get("/product", auth, getAllProduct);
+router.get("/product", getAllProduct);
 
 router.post("/product", auth, createProduct);
 
