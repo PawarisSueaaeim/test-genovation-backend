@@ -1,11 +1,8 @@
 const express = require('express');
-
 const morgan = require('morgan');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-
 const connectDB = require('./config/db');
-
 const { readdirSync } = require('fs');
 
 const app = express();
