@@ -1,9 +1,9 @@
-const product = require("../model/product")
+const doctor = require("../model/doctor")
 
-exports.getProduct = async (request, response) => {
+exports.getDoctor = async (request, response) => {
     try {
         const id = request.params.id
-        const res = await product.findOne({ _id: id }).exec()
+        const res = await doctor.findOne({ _id: id }).exec()
         response.send(res)
     } catch (error) {
         console.log(error)
@@ -11,9 +11,9 @@ exports.getProduct = async (request, response) => {
     }
 }
 
-exports.getAllProduct = async (request, response) => {
+exports.getAllDoctor = async (request, response) => {
     try {
-        const res = await product.find({})
+        const res = await doctor.find({})
         response.send(res)
     } catch (error) {
         console.log(error)
@@ -21,20 +21,19 @@ exports.getAllProduct = async (request, response) => {
     }
 }
 
-exports.createProduct = async (request, response) => {
+exports.createDoctor = async (request, response) => {
     try {
-        console.log(request.body)
-        const producted = await product(request.body).save()
-        response.send(producted)
+        const created = await doctor(request.body).save()
+        response.send(created)
     } catch (error) {
         console.log(error)
     }
 }
 
-exports.updateProduct = async (request, response) => {
+exports.updateDoctor = async (request, response) => {
     try {
         const id = await request.params.id
-        const res = await product
+        const res = await doctor
             .findOneAndUpdate({ _id: id }, request.body, { new: true })
             .exec()
         response.send(res)
@@ -44,10 +43,10 @@ exports.updateProduct = async (request, response) => {
     }
 }
 
-exports.deleteProduct = async (request, response) => {
+exports.deleteDoctor = async (request, response) => {
     try {
         const id = await request.params.id
-        const res = await product.findOneAndDelete({ _id: id }).exec()
+        const res = await doctor.findOneAndDelete({ _id: id }).exec()
         response.send(res)
     } catch (error) {
         console.log(error)
