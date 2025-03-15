@@ -14,6 +14,7 @@ exports.register = async (request, response) => {
             await auth({
                 username: data.username,
                 password: hash,
+                isAdmin: false,
             }).save();
             response.status(200).send("created successfully");
         } else {
@@ -37,19 +38,22 @@ exports.login = async (request, response) => {
             if (isMatch) {
                 const payload = {
                     auth: {
+                        isAdmin: user.isAdmin,
                         username: user.username,
                     },
                 };
                 jwt.sign(
                     payload,
                     "jwtsecret",
-                    { expiresIn: 20 },
+                    { expiresIn: 20000 },
                     (error, token) => {
                         if (error) {
                             throw error;
                         }
                         response.json({
                             token,
+                            isAdmin: user.isAdmin,
+                            test: "test",
                             username: user.username,
                         });
                     }

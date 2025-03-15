@@ -1,5 +1,4 @@
 const express = require("express");
-const auth = require("../model/auth");
 const {
     getAllDoctor,
     getDoctor,
@@ -7,6 +6,7 @@ const {
     updateDoctor,
     deleteDoctor,
 } = require("../controllers/doctor");
+const { auth } = require("../middleware/auth");
 
 const router = express.Router();
 
