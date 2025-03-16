@@ -23,8 +23,14 @@ exports.getAllDoctor = async (request, response) => {
 
 exports.createDoctor = async (request, response) => {
     try {
-        const created = await doctor(request.body).save()
-        response.send(created)
+        const data = await request.body;
+        const hasDoctor = await doctor.findOne({ name: data.name })
+        if (!hasDoctor) {
+            const created = await doctor(request.body).save()
+            response.send(created)
+        }else{
+            response.send("แพย์ท่านนี้มีิยู่แล้ว");
+        }
     } catch (error) {
         console.log(error)
     }
