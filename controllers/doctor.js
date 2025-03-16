@@ -23,16 +23,18 @@ exports.getAllDoctor = async (request, response) => {
 
 exports.createDoctor = async (request, response) => {
     try {
-        const data = await request.body;
-        const hasDoctor = await doctor.findOne({ name: data.name })
+        const data = request.body;
+        const hasDoctor = await doctor.findOne({ name: new RegExp(`^${data.name}$`, "i") });
+
         if (!hasDoctor) {
-            const created = await doctor(request.body).save()
-            response.send(created)
-        }else{
-            response.send("แพย์ท่านนี้มีิยู่แล้ว");
+            const created = await new doctor(data).save();
+            response.status(200).send(created);
+        } else {
+            response.status(400).send("แพทย์ท่านนี้มีอยู่แล้ว");
         }
     } catch (error) {
         console.log(error)
+        response.status(500).send("Server error")
     }
 }
 
