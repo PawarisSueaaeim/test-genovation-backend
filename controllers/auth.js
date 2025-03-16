@@ -38,6 +38,7 @@ exports.login = async (request, response) => {
             if (isMatch) {
                 const payload = {
                     auth: {
+                        _id: user._id,
                         isAdmin: user.isAdmin,
                         username: user.username,
                     },
@@ -52,8 +53,8 @@ exports.login = async (request, response) => {
                         }
                         response.json({
                             token,
+                            id: user._id,
                             isAdmin: user.isAdmin,
-                            test: "test",
                             username: user.username,
                         });
                     }
