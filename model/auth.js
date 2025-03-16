@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const special = require("./special");
 
 const authSchema = mongoose.Schema(
     {
@@ -8,6 +9,16 @@ const authSchema = mongoose.Schema(
             type: String,
             required: true,
         },
+        booking: [
+            {
+                doctor: String,
+                special: String,
+                id: Number,
+                date: String,
+                start: String,
+                end: String,
+            },
+        ],
     },
     { timestamp: true }
 );

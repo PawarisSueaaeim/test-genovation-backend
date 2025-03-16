@@ -16,7 +16,7 @@ router.get("/getDoctor/:id", auth, getDoctor);
 
 router.post("/createDoctor", auth, createDoctor);
 
-router.put("/updateDoctor", auth, updateDoctor);
+router.put("/updateDoctor/:id", auth, updateDoctor);
 
 router.delete("/deleteDoctor/:id", auth, deleteDoctor);
 

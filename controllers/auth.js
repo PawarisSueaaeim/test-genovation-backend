@@ -1,6 +1,8 @@
 const auth = require("../model/auth");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const doctor = require("../model/doctor");
+const special = require("../model/special");
 
 exports.register = async (request, response) => {
     try {
@@ -65,6 +67,86 @@ exports.login = async (request, response) => {
         } else {
             response.status(401).send("Invalid User");
         }
+    } catch (error) {
+        console.log(error);
+        response.status(500).send("server error");
+    }
+};
+
+exports.book = async (request, response) => {
+    try {
+        const id = request.params.id;
+        const dataBook = await request.body;
+
+        const user = await auth.findById(id);
+        const doctorData = await doctor.findById(dataBook.doctorId);
+        if (!doctorData) {
+            response.status(404).send("Document not found");
+        } else {
+            const timeSlotObject = doctorData.timeSlot.find(
+                (item) => item.id === Number(dataBook.timeSelected)
+            );
+            if (!timeSlotObject) {
+                response.status(404).send("Time slot not found");
+                return;
+            } else {
+                const updatedTimeSlotObject = {
+                    id: timeSlotObject.id,
+                    date: timeSlotObject.date,
+                    start: timeSlotObject.start,
+                    end: timeSlotObject.end,
+                    doctor: doctorData.name,
+                    special: doctorData.special
+                };
+                user.booking.push(updatedTimeSlotObject);
+                await user.save();
+                response.status(200).send("Updated document successfully");
+            }
+        }
+    } catch (error) {
+        console.log(error);
+        response.status(500).send("server error");
+    }
+};
+
+exports.getBooking = async (request, response) => {
+    try {
+        const id = request.params.id;
+        const user = await auth.findById(id);
+        if (!user) {
+            response.status(404).send("User not found");
+        } else {
+            response.status(200).send(user.booking);
+        }
+    } catch (error) {
+        console.log(error);
+        response.status(500).send("server error");
+    }
+}
+
+exports.deleteBooking = async (request, response) => {
+    try {
+        const userId = request.params.userId;
+        const bookingId = Number(request.params.bookingId);
+
+        const user = await auth.findById(userId);
+        if (!user) {
+            response.status(404).send("User not found");
+            return;
+        }
+
+        const bookingIndex = user.booking.findIndex(
+            (item) => item.id === bookingId
+        );
+
+        if (bookingIndex === -1) {
+            response.status(404).send("Booking not found");
+            return;
+        }
+
+        user.booking.splice(bookingIndex, 1);
+        await user.save();
+        response.status(200).send("Deleted booking successfully");
     } catch (error) {
         console.log(error);
         response.status(500).send("server error");
