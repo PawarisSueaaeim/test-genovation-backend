@@ -23,7 +23,7 @@ services:
     environment:
       DATABASE_HOST: mongodb
       DATABASE_PORT: 27017
-      DATABASE_COLLECTION: code-sanbox-project
+      DATABASE_COLLECTION: test-genovation-backend
     command: npm start
 
 volumes:

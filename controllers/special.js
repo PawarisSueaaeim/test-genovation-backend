@@ -1,6 +1,5 @@
 const special = require("../model/special");
 
-
 exports.getSpecial = async (request, response) => {
     try {
         const res = await special.find({});
