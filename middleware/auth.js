@@ -15,12 +15,10 @@ exports.auth = async (request, response, next) => {
 
         // ตรวจสอบ token
         const decoded = jwt.verify(token, "jwtsecret");
-
-        console.log("Decoded Token:", decoded);
+        console.log(decoded);
 
         next();
     } catch (error) {
-        console.log("JWT Error:", error);
         response.status(401).send("Token is invalid");
     }
 };
