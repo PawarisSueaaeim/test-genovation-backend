@@ -96,10 +96,17 @@ exports.book = async (request, response) => {
                     start: timeSlotObject.start,
                     end: timeSlotObject.end,
                     doctor: doctorData.name,
+                    doctor_id: doctorData._id,
                     special: doctorData.special
                 };
                 user.booking.push(updatedTimeSlotObject);
                 await user.save();
+
+                doctorData.timeSlot = doctorData.timeSlot.filter(
+                    (slot) => slot.id !== timeSlotObject.id
+                );
+                await doctorData.save();
+
                 response.status(200).send("Updated document successfully");
             }
         }
@@ -128,6 +135,8 @@ exports.deleteBooking = async (request, response) => {
     try {
         const userId = request.params.userId;
         const bookingId = Number(request.params.bookingId);
+        const doctorId = request.params.doctorId;
+        const bookingData = request.body;
 
         const user = await auth.findById(userId);
         if (!user) {
@@ -146,6 +155,21 @@ exports.deleteBooking = async (request, response) => {
 
         user.booking.splice(bookingIndex, 1);
         await user.save();
+
+        const doctorData = await doctor.findById(doctorId);
+        if (!doctorData) {
+            response.status(404).send("Doctor not found");
+            return;
+        }else{
+            doctorData.timeSlot.push({
+                date: bookingData.date,
+                start: bookingData.start,
+                end: bookingData.end,
+                id: bookingId,
+            })
+            await doctorData.save();
+        }
+
         response.status(200).send("Deleted booking successfully");
     } catch (error) {
         console.log(error);

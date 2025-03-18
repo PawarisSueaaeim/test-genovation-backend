@@ -11,6 +11,7 @@ const authSchema = mongoose.Schema(
         },
         booking: [
             {
+                doctor_id: String,
                 doctor: String,
                 special: String,
                 id: Number,

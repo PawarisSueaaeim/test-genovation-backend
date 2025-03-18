@@ -7,7 +7,7 @@ router.post("/register", register);
 router.post("/login", login);
 router.patch("/book/:id", auth, book);
 router.get("/getBooking/:id", auth, getBooking);
-router.delete("/deleteBooking/:userId/:bookingId", auth, deleteBooking);
+router.post("/deleteBooking/:userId/:bookingId/:doctorId", auth, deleteBooking);
 
 
 module.exports = router;
